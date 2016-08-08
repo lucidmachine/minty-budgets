@@ -15,3 +15,16 @@ export default class Transaction extends Component {
         );
     }
 }
+
+Transaction.propTypes = {
+    _id:            PropTypes.number.isRequired,
+    accountId:      PropTypes.number.isRequired,
+    amount:         PropTypes.number.isRequired,
+    category:       PropTypes.object,
+    date:           PropTypes.string.isRequired,
+    isExpense:      PropTypes.bool.isRequired,
+    isInvestment:   PropTypes.bool.isRequired,
+    merchant:       PropTypes.string.isRequired,
+    note:           PropTypes.string,
+    tags:           PropTypes.array,
+}
