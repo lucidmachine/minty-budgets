@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 export default class Transaction extends Component {
     render () {
         const amt = Number(this.props.amount).toFixed(2);
+        const formId = "tx-form-" + this.props._id;
         return (
             <tr className="transaction">
                 <td>{this.props.date}</td>
@@ -12,6 +13,7 @@ export default class Transaction extends Component {
                 <td>{this.props.category}</td>
                 <td>{this.props.tags.join(', ')}</td>
                 <td>{amt}</td>
+                <td><form id={formId}><input type="hidden" name="id" value={this.props._id} /></form></td>
             </tr>
         );
     }

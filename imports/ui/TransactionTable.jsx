@@ -19,6 +19,7 @@ export default class TransactionTable extends Component {
         <th>Category</th>
         <th>Tags</th>
         <th>Amount</th>
+        <th></th>
       </tr></thead>
       <tbody>
         {this.renderTransactions()}
