@@ -8,8 +8,6 @@ import Transaction from './Transaction.jsx';
   
 class App extends Component {
   handleSubmit(event) {
-    console.log('In App.handleSubmit()');
-
     // Stop submit
     event.preventDefault();
 
