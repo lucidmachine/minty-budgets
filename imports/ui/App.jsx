@@ -1,18 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
+
+import { Transactions } from '../api/transactions.js';
 
 import Transaction from './Transaction.jsx';
   
-export default class App extends Component {
-  getTransactions() {
-    return [
-      { _id: 1, accountId: 1, amount: 1.00, date: "2016-08-08", isExpense: false, isInvestment: false, merchant: "MADE UP MERCHANT", note: "My note about this tx.", category: null, tags: [] },
-      { _id: 2, accountId: 1, amount: 1000.00, date: "2016-08-08", isExpense: false, isInvestment: false, merchant: "MADE UP MERCHANT 2", note: "10 C-notes, yo.", category: null, tags: [] },
-    ];
-  }
-
+class App extends Component {
   renderTransactions() {
-    return this.getTransactions().map((tx) => (
-      <Transaction key={tx._id} transaction={tx} />
+    return this.props.transactions.map((tx) => (
+      <Transaction key={tx._id} _id={tx._id} accountId={tx.accountId} amount={tx.amount} date={tx.date} isExpense={tx.isExpense} isInvestment={tx.isInvestment} merchant={tx.merchant} note={tx.note} tags={tx.tags} />
     ));
   }
 
@@ -41,3 +37,13 @@ export default class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  transactions: PropTypes.array.isRequired,
+};
+
+export default createContainer(() => {
+  return {
+    transactions: Transactions.find({}).fetch(),
+  };
+}, App);
