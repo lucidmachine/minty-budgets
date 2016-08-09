@@ -4,7 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import { Transactions } from '../api/transactions.js';
 
-import Transaction from './Transaction.jsx';
+import TransactionTable from './TransactionTable.jsx';
   
 class App extends Component {
   handleSubmit(event) {
@@ -35,12 +35,6 @@ class App extends Component {
     ReactDOM.findDOMNode(this.refs.txAmount).value='';
   }
 
-  renderTransactions() {
-    return this.props.transactions.map((tx) => (
-      <Transaction key={tx._id} _id={tx._id} accountId={tx.accountId} amount={tx.amount} date={tx.date} isExpense={tx.isExpense} isInvestment={tx.isInvestment} merchant={tx.merchant} note={tx.note} tags={tx.tags} />
-    ));
-  }
-
   render() {
     return (
       <div className="container">
@@ -48,20 +42,7 @@ class App extends Component {
           <h1>App Thang</h1>
         </header>
 
-        <table>
-          <thead><tr>
-            <th>Date</th>
-            <th>Account</th>
-            <th>Merchant</th>
-            <th>Note</th>
-            <th>Category</th>
-            <th>Tags</th>
-            <th>Amount</th>
-          </tr></thead>
-          <tbody>
-            {this.renderTransactions()}
-          </tbody>
-        </table>
+        <TransactionTable transactions={this.props.transactions} />
 
         <form className="new-transaction" onSubmit={this.handleSubmit.bind(this)}>
           <label>Account<input type="text" ref="txAccount" /></label>
