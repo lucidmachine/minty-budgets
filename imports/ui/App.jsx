@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import { Transactions } from '../api/transactions.js';
@@ -10,7 +9,7 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-      
+
         <header>
           <h1>App Thang</h1>
         </header>

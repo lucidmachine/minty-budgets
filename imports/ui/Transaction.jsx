@@ -1,16 +1,40 @@
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
+
+import { Transactions } from '../api/transactions.js';
 
 export default class Transaction extends Component {
-    onEditClicked(event) {
-        console.log("Edit clicked");
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            editing: false,
+        };
     }
 
-    onSaveClicked(event) {
-        console.log("Save clicked");
+    toggleEditing() {
+        this.setState({
+            editing: !this.state.editing,
+        });
+    }
+
+    resetFormFields() {
+        ReactDOM.findDOMNode(this.refs.txAccount).value = this.props.accountId;
+        ReactDOM.findDOMNode(this.refs.txAmount).value = this.props.amount;
+        ReactDOM.findDOMNode(this.refs.txCategory).value = this.props.category;
+        ReactDOM.findDOMNode(this.refs.txDate).value = this.props.date;
+        ReactDOM.findDOMNode(this.refs.txMerchant).value = this.props.merchant;
+        ReactDOM.findDOMNode(this.refs.txNote).value = this.props.note;
+        ReactDOM.findDOMNode(this.refs.txTags).value = this.props.tags.join(',');
+    }
+
+    onEditClicked(event) {
+        this.toggleEditing();
     }
 
     onCancelClicked(event) {
-        console.log("Cancel clicked");
+        this.resetFormFields();
+        this.toggleEditing();
     }
 
     onSubmit(event) {
@@ -34,22 +58,25 @@ export default class Transaction extends Component {
     }
 
     render () {
-        const amt = Number(this.props.amount).toFixed(2);
         const formId = "tx-form-" + this.props._id;
+        const editingClass = this.state.editing ?
+            "editing" :
+            "saved";
+        const rowClass = "transaction " + editingClass;
         return (
-            <tr className="transaction">
-                <td><input form={formId} type="text" placeholder="MM/DD/YYYY" defaultValue={this.props.date} /></td>
-                <td><input form={formId} type="text" placeholder="#" defaultValue={this.props.accountId} /></td>
-                <td><input form={formId} type="text" placeholder="Merchant" defaultValue={this.props.merchant} /></td>
-                <td><input form={formId} type="text" placeholder="Note" defaultValue={this.props.note} /></td>
-                <td><input form={formId} type="text" placeholder="Category" defaultValue={this.props.category} /></td>
-                <td><input form={formId} type="text" placeholder="Tags" defaultValue={this.props.tags.join(', ')} /></td>
-                <td><input form={formId} type="text" placeholder="0.00" defaultValue={amt} /></td>
+            <tr className={rowClass}>
+                <td><input form={formId} ref="txDate" type="text" placeholder="MM/DD/YYYY" defaultValue={this.props.date} /></td>
+                <td><input form={formId} ref="txAccount" type="text" placeholder="#" defaultValue={this.props.accountId} /></td>
+                <td><input form={formId} ref="txMerchant" type="text" placeholder="Merchant" defaultValue={this.props.merchant} /></td>
+                <td><input form={formId} ref="txNote" type="text" placeholder="Note" defaultValue={this.props.note} /></td>
+                <td><input form={formId} ref="txCategory" type="text" placeholder="Category" defaultValue={this.props.category} /></td>
+                <td><input form={formId} ref="txTags" type="text" placeholder="Tags" defaultValue={this.props.tags.join(',')} /></td>
+                <td><input form={formId} ref="txAmount" type="text" placeholder="0.00" defaultValue={this.props.amount.toFixed(2)} /></td>
                 <td>
                     <form id={formId} className="tx-form" onSubmit={this.onSubmit.bind(this)}>
                         <input type="hidden" ref="txId" name="id" value={this.props._id} />
                         <button type="button" className="tx-edit" onClick={this.onEditClicked.bind(this)}>Edit</button>
-                        <button type="button" className="tx-save" onClick={this.onSaveClicked.bind(this)}>Save</button>
+                        <button type="submit" className="tx-save">Save</button>
                         <button type="button" className="tx-cancel" onClick={this.onCancelClicked.bind(this)}>Cancel</button>
                     </form>
                 </td>
