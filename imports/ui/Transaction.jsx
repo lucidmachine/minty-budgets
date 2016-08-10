@@ -12,12 +12,6 @@ export default class Transaction extends Component {
         };
     }
 
-    toggleEditing() {
-        this.setState({
-            editing: !this.state.editing,
-        });
-    }
-
     resetFormFields() {
         ReactDOM.findDOMNode(this.refs.txAccount).value = this.props.accountId;
         ReactDOM.findDOMNode(this.refs.txAmount).value = this.props.amount;
@@ -29,12 +23,12 @@ export default class Transaction extends Component {
     }
 
     onEditClicked(event) {
-        this.toggleEditing();
+        this.setState({ editing: true, });
     }
 
     onCancelClicked(event) {
         this.resetFormFields();
-        this.toggleEditing();
+        this.setState({ editing: false, });
     }
 
     onSubmit(event) {
