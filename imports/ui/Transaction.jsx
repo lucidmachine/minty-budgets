@@ -46,12 +46,11 @@ export default class Transaction extends Component {
             // Generate data
             const amt = Number(Number(ReactDOM.findDOMNode(this.refs.txAmount).value.trim()).toFixed(2));
             let dt = new Date(ReactDOM.findDOMNode(this.refs.txDate).value);
-            const txData = {
+            let txData = {
                 accountId:      1,
                 amount:         amt,
                 category:       {},
                 date:           (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear(),
-                dateTime:       dt,
                 isExpense:      false,
                 isInvestment:   false,
                 merchant:       ReactDOM.findDOMNode(this.refs.txMerchant).value.trim(),
@@ -62,9 +61,10 @@ export default class Transaction extends Component {
             // Store data
             const txId = ReactDOM.findDOMNode(this.refs.txId).value;
             if (txId && txId !== "new") {
-                Transactions.update(txId, { $set: txData, });
+                txData._id = txId;
+                Meteor.call('transactions.update', txId, txData);
             } else {
-                Transactions.insert(txData);
+                Meteor.call('transactions.insert', txData);
                 if (this.props.toggleAdding) {
                     this.props.toggleAdding();
                 }
@@ -81,7 +81,7 @@ export default class Transaction extends Component {
             if (this.props.toggleAdding) {
                 this.props.toggleAdding();
             } else if (this.props._id && this.props._id !== "new") {
-                Transactions.remove(this.props._id);
+                Meteor.call('transactions.remove', this.props._id);
             }
         }
     }
