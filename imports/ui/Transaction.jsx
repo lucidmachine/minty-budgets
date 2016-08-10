@@ -23,32 +23,41 @@ export default class Transaction extends Component {
     }
 
     onEditClicked(event) {
-        this.setState({ editing: true, });
+        if (!this.state.editing) {
+            this.setState({ editing: true, });
+        }
     }
 
     onCancelClicked(event) {
-        this.resetFormFields();
-        this.setState({ editing: false, });
+        if (this.state.editing) {
+            this.resetFormFields();
+            this.setState({ editing: false, });
+        }
     }
 
     onSubmit(event) {
         event.preventDefault();
+        
+        if (this.state.editing) {
+            // Insert data
+            const amt = Number(Number(ReactDOM.findDOMNode(this.refs.txAmount).value.trim()).toFixed(2));
+            const now = new Date();
+            const newData = {
+              accountId:      1,
+              amount:         amt,
+              category:       {},
+              date:           now.getMonth() + "/" + now.getDate() + "/" + now.getFullYear(),
+              isExpense:      false,
+              isInvestment:   false,
+              merchant:       ReactDOM.findDOMNode(this.refs.txMerchant).value.trim(),
+              note:           ReactDOM.findDOMNode(this.refs.txNote).value.trim(),
+              tags:           ReactDOM.findDOMNode(this.refs.txTags).value.trim().split(','),
+            };
+            Transactions.insert(newData);
 
-        // Insert data
-        const amt = Number(Number(ReactDOM.findDOMNode(this.refs.txAmount).value.trim()).toFixed(2));
-        const now = new Date();
-        const newData = {
-          accountId:      1,
-          amount:         amt,
-          category:       {},
-          date:           now.getMonth() + "/" + now.getDate() + "/" + now.getFullYear(),
-          isExpense:      false,
-          isInvestment:   false,
-          merchant:       ReactDOM.findDOMNode(this.refs.txMerchant).value.trim(),
-          note:           ReactDOM.findDOMNode(this.refs.txNote).value.trim(),
-          tags:           ReactDOM.findDOMNode(this.refs.txTags).value.trim().split(','),
-        };
-        Transactions.insert(newData);
+            // Stop editing
+            this.setState({ editing: false, });
+        }
     }
 
     render () {
