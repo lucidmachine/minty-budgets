@@ -8,7 +8,7 @@ export default class Transaction extends Component {
         super(props);
 
         this.state = {
-            editing: false,
+            editing: this.props._id === "new",
         };
     }
 
@@ -32,6 +32,10 @@ export default class Transaction extends Component {
         if (this.state.editing) {
             this.resetFormFields();
             this.setState({ editing: false, });
+
+            if (this.props.toggleAdding) {
+                this.props.toggleAdding();
+            }
         }
     }
 
@@ -41,25 +45,29 @@ export default class Transaction extends Component {
         if (this.state.editing) {
             // Generate data
             const amt = Number(Number(ReactDOM.findDOMNode(this.refs.txAmount).value.trim()).toFixed(2));
-            const now = new Date();
+            let dt = new Date(ReactDOM.findDOMNode(this.refs.txDate).value);
             const txData = {
-              accountId:      1,
-              amount:         amt,
-              category:       {},
-              date:           now.getMonth() + "/" + now.getDate() + "/" + now.getFullYear(),
-              isExpense:      false,
-              isInvestment:   false,
-              merchant:       ReactDOM.findDOMNode(this.refs.txMerchant).value.trim(),
-              note:           ReactDOM.findDOMNode(this.refs.txNote).value.trim(),
-              tags:           ReactDOM.findDOMNode(this.refs.txTags).value.trim().split(','),
+                accountId:      1,
+                amount:         amt,
+                category:       {},
+                date:           (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear(),
+                dateTime:       dt,
+                isExpense:      false,
+                isInvestment:   false,
+                merchant:       ReactDOM.findDOMNode(this.refs.txMerchant).value.trim(),
+                note:           ReactDOM.findDOMNode(this.refs.txNote).value.trim(),
+                tags:           ReactDOM.findDOMNode(this.refs.txTags).value.trim().split(','),
             };
 
             // Store data
             const txId = ReactDOM.findDOMNode(this.refs.txId).value;
-            if (txId) {
+            if (txId && txId !== "new") {
                 Transactions.update(txId, { $set: txData, });
             } else {
                 Transactions.insert(txData);
+                if (this.props.toggleAdding) {
+                    this.props.toggleAdding();
+                }
             }
 
             // Stop editing
@@ -100,9 +108,11 @@ Transaction.propTypes = {
     amount:         PropTypes.number.isRequired,
     category:       PropTypes.object,
     date:           PropTypes.string.isRequired,
+    dateTime:       PropTypes.instanceOf(Date).isRequired,
     isExpense:      PropTypes.bool.isRequired,
     isInvestment:   PropTypes.bool.isRequired,
     merchant:       PropTypes.string.isRequired,
     note:           PropTypes.string,
-    tags:           PropTypes.array,
+    tags:           PropTypes.array.isRequired,
+    toggleAdding:   React.PropTypes.func,
 }

@@ -6,6 +6,18 @@ import { Transactions } from '../api/transactions.js';
 import TransactionTable from './TransactionTable.jsx';
   
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      adding: false,
+    };
+  }
+
+  toggleAdding(event) {
+    this.setState({ adding: !this.state.adding, });
+  }
+
   render() {
     return (
       <div className="container">
@@ -14,7 +26,9 @@ class App extends Component {
           <h1>App Thang</h1>
         </header>
 
-        <TransactionTable transactions={this.props.transactions} />
+        <TransactionTable transactions={this.props.transactions} adding={this.state.adding} toggleAdding={this.toggleAdding.bind(this)} />
+
+        <button className="tx-add" onClick={this.toggleAdding.bind(this)}>Add</button>
 
       </div>
     );
@@ -27,6 +41,6 @@ App.propTypes = {
 
 export default createContainer(() => {
   return {
-    transactions: Transactions.find({}).fetch(),
+    transactions: Transactions.find({}, { sort: { dateTime: -1 }}).fetch(),
   };
 }, App);
