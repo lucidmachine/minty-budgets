@@ -1,0 +1,14 @@
+.transaction {
+    &.saved {
+        button.tx-save, button.tx-cancel {
+            display: none;
+        }
+    }
+
+    &.editing {
+        background: green;
+        button.tx-edit {
+            display: none;
+        }
+    }
+}
