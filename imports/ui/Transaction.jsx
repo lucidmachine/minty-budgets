@@ -37,12 +37,12 @@ export default class Transaction extends Component {
 
     onSubmit(event) {
         event.preventDefault();
-        
+
         if (this.state.editing) {
-            // Insert data
+            // Generate data
             const amt = Number(Number(ReactDOM.findDOMNode(this.refs.txAmount).value.trim()).toFixed(2));
             const now = new Date();
-            const newData = {
+            const txData = {
               accountId:      1,
               amount:         amt,
               category:       {},
@@ -53,7 +53,14 @@ export default class Transaction extends Component {
               note:           ReactDOM.findDOMNode(this.refs.txNote).value.trim(),
               tags:           ReactDOM.findDOMNode(this.refs.txTags).value.trim().split(','),
             };
-            Transactions.insert(newData);
+
+            // Store data
+            const txId = ReactDOM.findDOMNode(this.refs.txId).value;
+            if (txId) {
+                Transactions.update(txId, { $set: txData, });
+            } else {
+                Transactions.insert(txData);
+            }
 
             // Stop editing
             this.setState({ editing: false, });
