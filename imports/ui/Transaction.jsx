@@ -14,7 +14,7 @@ export default class Transaction extends Component {
 
     resetFormFields() {
         ReactDOM.findDOMNode(this.refs.txAccount).value = this.props.accountId;
-        ReactDOM.findDOMNode(this.refs.txAmount).value = this.props.amount;
+        ReactDOM.findDOMNode(this.refs.txAmount).value = this.props.amount.toFixed(2);
         ReactDOM.findDOMNode(this.refs.txCategory).value = this.props.category;
         ReactDOM.findDOMNode(this.refs.txDate).value = this.props.date;
         ReactDOM.findDOMNode(this.refs.txMerchant).value = this.props.merchant;
