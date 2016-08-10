@@ -77,7 +77,7 @@ export default class Transaction extends Component {
                 <td><input form={formId} ref="txAmount" type="text" placeholder="0.00" defaultValue={this.props.amount.toFixed(2)} /></td>
                 <td>
                     <form id={formId} className="tx-form" onSubmit={this.onSubmit.bind(this)}>
-                        <input type="hidden" ref="txId" name="id" value={this.props._id} />
+                        <input type="hidden" ref="txId" value={this.props._id} />
                         <button type="button" className="tx-edit" onClick={this.onEditClicked.bind(this)}>Edit</button>
                         <button type="submit" className="tx-save">Save</button>
                         <button type="button" className="tx-cancel" onClick={this.onCancelClicked.bind(this)}>Cancel</button>
