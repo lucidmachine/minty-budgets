@@ -1,6 +1,6 @@
 .transaction {
     &.saved {
-        button.tx-save, button.tx-cancel {
+        button.tx-save, button.tx-cancel, button.tx-delete {
             display: none;
         }
     }

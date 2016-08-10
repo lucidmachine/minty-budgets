@@ -75,6 +75,17 @@ export default class Transaction extends Component {
         }
     }
 
+    onDeleteClicked(event) {
+        console.log(this);
+        if (this.state.editing) {
+            if (this.props.toggleAdding) {
+                this.props.toggleAdding();
+            } else if (this.props._id && this.props._id !== "new") {
+                Transactions.remove(this.props._id);
+            }
+        }
+    }
+
     render () {
         const formId = "tx-form-" + this.props._id;
         const editingClass = this.state.editing ?
@@ -95,6 +106,7 @@ export default class Transaction extends Component {
                         <input type="hidden" ref="txId" value={this.props._id} />
                         <button type="button" className="tx-edit" onClick={this.onEditClicked.bind(this)}>Edit</button>
                         <button type="submit" className="tx-save">Save</button>
+                        <button type="delete" className="tx-delete" onClick={this.onDeleteClicked.bind(this)}>Delete</button>
                         <button type="button" className="tx-cancel" onClick={this.onCancelClicked.bind(this)}>Cancel</button>
                     </form>
                 </td>
